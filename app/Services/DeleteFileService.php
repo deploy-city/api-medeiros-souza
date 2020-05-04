@@ -10,7 +10,6 @@ class DeleteFileService {
     {
         $client = new Client([
             'base_uri' => 'http://api.medeirossouza.com',
-            'timeout'  => 2.0,
         ]);
 
         $client->request('DELETE', '/api/files/'. $filename);
