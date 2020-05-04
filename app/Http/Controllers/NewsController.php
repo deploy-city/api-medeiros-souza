@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\NewModel;
+
+use App\Services\UploadFileService;
+use App\Services\DeleteFileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,10 +33,8 @@ class NewsController extends Controller
     {
         $data = $request->all();
 
-        $name = time() . uniqid();
-        $filename = str_shuffle($name) . '.jpg';
-        $file = $request->image->storeAs('public/news', $filename);
-
+        $uploadFileService = new UploadFileService();
+        $filename = $uploadFileService->execute($request->image);
 
         $new = NewModel::create([
             "title" => $data["title"],
@@ -85,11 +86,11 @@ class NewsController extends Controller
         ];
 
         if ($request->hasFile('image')) {
-            $name = time() . uniqid();
-            $filename = str_shuffle($name) . '.jpg';
-            $file = $request->image->storeAs('public/news', $filename);
+            $deleteFileService = new DeleteFileService();
+            $deleteFileService->execute($new->image);
 
-            Storage::delete("images/" . $new->image);
+            $uploadFileService = new UploadFileService();
+            $filename = $uploadFileService->execute($request->image);
 
             $newData["image"] = $filename;
         }
