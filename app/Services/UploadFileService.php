@@ -15,7 +15,7 @@ class UploadFileService
         $filename = Str::uuid() . '.jpg';
 
         $client = new Client([
-            'base_uri' => 'http://api.medeirossouza.com',
+            'base_uri' => 'http://localhost:8001',
         ]);
 
         $client->request('POST', '/api/files', [

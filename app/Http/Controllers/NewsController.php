@@ -129,7 +129,8 @@ class NewsController extends Controller
             return response(json_encode(["error" => 'New not found']), 404);
         }
 
-        Storage::delete("images/" . $new->image);
+        $deleteFileService = new DeleteFileService();
+        $deleteFileService->execute($new->image);
 
         $new->delete();
 
